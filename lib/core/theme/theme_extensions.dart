@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_text_styles.dart';
 
+// Theme'ya kolay erişim için extension'lar
 extension ThemeExtension on BuildContext {
+  // Renkler
   ColorScheme get colors => Theme.of(this).colorScheme;
 
+  // Metin stilleri
   TextTheme get textStyles => Theme.of(this).textTheme;
 
+  // Tema durumu
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 }
 
+// AppColors'a kolay erişim için extension
 extension AppColorsExtension on BuildContext {
   Color get primaryColor =>
       isDarkMode ? AppColors.primaryDark : AppColors.primary;
@@ -25,6 +30,7 @@ extension AppColorsExtension on BuildContext {
       isDarkMode ? AppColors.outlineDark : AppColors.outline;
 }
 
+// AppTextStyles'a kolay erişim için extension
 extension AppTextStylesExtension on BuildContext {
   TextStyle get h1 => AppTextStyles.h1.copyWith(color: textPrimaryColor);
 

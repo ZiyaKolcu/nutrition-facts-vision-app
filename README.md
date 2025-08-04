@@ -1,16 +1,23 @@
-# nutritionfactsvisionapp
+# Nutrition Facts Vision App
 
-A new Flutter project.
+A Flutter mobile application that allows users to scan food labels and receive a health risk analysis based on the listed ingredients. The app combines OCR (Optical Character Recognition) using Google ML Kit with AI-powered analysis through OpenAI's GPT-4o-mini model.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- User authentication (Email/Password) with Firebase  
+- Profile screen with user information and settings 
+- Home screen with history of previous scans (mock implementation)
+- Health risk analysis based on ingredients (mock implementation)
+- AI-powered insights using OpenAI GPT (mock implementation)
+- Analysis screen showing risk levels and summaries (mock implementation)
+- Scan food labels using the device camera (planned)
+- OCR recognition using Google ML Kit (planned)
 
-A few resources to get you started if this is your first Flutter project:
+## Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Flutter**: Cross-platform mobile development
+- **Firebase Authentication**: User sign-up and login
+- **Google ML Kit**: OCR label text extraction
+- **FastAPI**: Backend services and database integration
+- **PostgreSQL**: Storage for scan history and results
+- **OpenAI API**: Ingredient risk evaluation via LLM

@@ -1,32 +1,40 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  // Ana mavi tonları
   static const Color primary = Color(0xFF2196F3);
   static const Color primaryLight = Color(0xFF64B5F6);
   static const Color primaryDark = Color(0xFF1976D2);
-
+  
+  // İkincil renkler
   static const Color secondary = Color(0xFF03DAC6);
   static const Color secondaryDark = Color(0xFF00BCD4);
-
+  
+  // Arka plan renkleri
   static const Color background = Color(0xFFF5F5F5);
   static const Color backgroundDark = Color(0xFF121212);
-
+  
+  // Yüzey renkleri
   static const Color surface = Colors.white;
   static const Color surfaceDark = Color(0xFF1E1E1E);
-
+  
+  // Metin renkleri
   static const Color textPrimary = Color(0xFF212121);
   static const Color textSecondary = Color(0xFF757575);
   static const Color textPrimaryDark = Color(0xFFFFFFFF);
   static const Color textSecondaryDark = Color(0xFFB3B3B3);
-
+  
+  // Çizgi ve kenarlık renkleri
   static const Color outline = Color(0xFFE0E0E0);
   static const Color outlineDark = Color(0xFF404040);
-
+  
+  // Durum renkleri
   static const Color success = Color(0xFF4CAF50);
   static const Color warning = Color(0xFFFF9800);
   static const Color error = Color(0xFFE53E3E);
   static const Color info = Color(0xFF2196F3);
-
+  
+  // Mavi tonları paleti
   static const Color blue50 = Color(0xFFE3F2FD);
   static const Color blue100 = Color(0xFFBBDEFB);
   static const Color blue200 = Color(0xFF90CAF9);
