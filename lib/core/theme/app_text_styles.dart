@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppTextStyles {
-  // Başlık stilleri
   static const TextStyle h1 = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
@@ -31,7 +30,6 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
-  // Alt başlık stilleri
   static const TextStyle subtitle1 = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
@@ -46,7 +44,6 @@ class AppTextStyles {
     color: AppColors.textSecondary,
   );
 
-  // Gövde metni stilleri
   static const TextStyle body1 = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
@@ -61,15 +58,14 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
-  // Buton ve etiket stilleri
   static const TextStyle button = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     height: 1.2,
     letterSpacing: 0.5,
+    color: AppColors.textPrimary,
   );
 
-  // Küçük metin stilleri
   static const TextStyle caption = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.normal,
@@ -85,7 +81,6 @@ class AppTextStyles {
     color: AppColors.textSecondary,
   );
 
-  // Özel durumlar için yardımcı stiller
   static const TextStyle link = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.normal,

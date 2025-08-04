@@ -18,7 +18,9 @@ class AnalysisScreen extends StatelessWidget {
           title: const Text('Analysis Result'),
           bottom: TabBar(
             labelColor: context.colors.onPrimary,
-            unselectedLabelColor: context.colors.onPrimary.withValues(alpha: .7),
+            unselectedLabelColor: context.colors.onPrimary.withValues(
+              alpha: .7,
+            ),
             indicatorColor: context.colors.onPrimary,
             tabs: const [
               Tab(text: 'Overview'),
@@ -28,11 +30,7 @@ class AnalysisScreen extends StatelessWidget {
           ),
         ),
         body: const TabBarView(
-          children: [
-            _OverviewTab(),
-            _DetailsTab(),
-            _AskAITab(),
-          ],
+          children: [_OverviewTab(), _DetailsTab(), _AskAITab()],
         ),
       ),
     );
