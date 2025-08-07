@@ -4,13 +4,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'widgets/profile_avatar_section.dart';
 import 'widgets/profile_settings_list.dart';
 import 'widgets/profile_chip_section.dart';
+import 'health_profile_provider.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
     final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Future.microtask(
+        () => ref.read(healthProfileProvider.notifier).fetchProfile(),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final profileAsync = ref.watch(healthProfileProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -21,6 +39,7 @@ class ProfileScreen extends ConsumerWidget {
               icon: const Icon(Icons.refresh),
               onPressed: () async {
                 await user.reload();
+                await ref.read(healthProfileProvider.notifier).fetchProfile();
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Profile refreshed')),
@@ -32,23 +51,46 @@ class ProfileScreen extends ConsumerWidget {
       ),
       body: user == null
           ? const Center(child: Text('No user logged in'))
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                const ProfileAvatarSection(),
-                const SizedBox(height: 24),
-                ProfileChipSection(
-                  title: 'Allergies',
-                  provider: allergiesProvider,
-                  icon: Icons.warning,
-                ),
-                ProfileChipSection(
-                  title: 'Health Conditions',
-                  provider: conditionsProvider,
-                  icon: Icons.medical_services,
-                ),
-                const SettingsList(),
-              ],
+          : profileAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text('Error: $e')),
+              data: (profile) {
+                if (profile == null) {
+                  return const Center(child: Text('No profile data'));
+                }
+                return ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    const ProfileAvatarSection(),
+                    const SizedBox(height: 24),
+                    ProfileChipSection(
+                      title: 'Allergies',
+                      items: profile.allergies,
+                      icon: Icons.warning,
+                      onChanged: (list) => ref
+                          .read(healthProfileProvider.notifier)
+                          .updateProfileField(allergies: list),
+                    ),
+                    ProfileChipSection(
+                      title: 'Health Conditions',
+                      items: profile.chronicConditions,
+                      icon: Icons.medical_services,
+                      onChanged: (list) => ref
+                          .read(healthProfileProvider.notifier)
+                          .updateProfileField(chronicConditions: list),
+                    ),
+                    ProfileChipSection(
+                      title: 'Dietary Preferences',
+                      items: profile.dietaryPreferences,
+                      icon: Icons.restaurant,
+                      onChanged: (list) => ref
+                          .read(healthProfileProvider.notifier)
+                          .updateProfileField(dietaryPreferences: list),
+                    ),
+                    const SettingsList(),
+                  ],
+                );
+              },
             ),
     );
   }

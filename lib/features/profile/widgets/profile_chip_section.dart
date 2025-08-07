@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/theme_extensions.dart';
 
-final allergiesProvider = StateProvider<List<String>>(
-  (ref) => ['Peanuts', 'Shellfish', 'Latex'],
-);
-
-final conditionsProvider = StateProvider<List<String>>(
-  (ref) => ['Lactose Intolerant', 'Hypertension'],
-);
-
-class ProfileChipSection extends ConsumerWidget {
+class ProfileChipSection extends StatelessWidget {
   final String title;
-  final StateProvider<List<String>> provider;
+  final List<String> items;
   final IconData icon;
+  final void Function(List<String>) onChanged;
 
   const ProfileChipSection({
     super.key,
     required this.title,
-    required this.provider,
+    required this.items,
     required this.icon,
+    required this.onChanged,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final items = ref.watch(provider);
+  Widget build(BuildContext context) {
     final colors = context.colors;
     final text = context.textStyles;
 
@@ -39,7 +31,7 @@ class ProfileChipSection extends ConsumerWidget {
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => _addItem(context, ref),
+              onPressed: () => _addItem(context),
             ),
           ],
         ),
@@ -54,9 +46,10 @@ class ProfileChipSection extends ConsumerWidget {
                   backgroundColor: colors.primaryContainer,
                   side: BorderSide.none,
                   deleteIcon: const Icon(Icons.close, size: 16),
-                  onDeleted: () => ref
-                      .read(provider.notifier)
-                      .update((state) => state.where((s) => s != e).toList()),
+                  onDeleted: () {
+                    final updated = List<String>.from(items)..remove(e);
+                    onChanged(updated);
+                  },
                 ),
               )
               .toList(),
@@ -66,7 +59,7 @@ class ProfileChipSection extends ConsumerWidget {
     );
   }
 
-  void _addItem(BuildContext context, WidgetRef ref) async {
+  void _addItem(BuildContext context) async {
     final textCtrl = TextEditingController();
     final res = await showDialog<String>(
       context: context,
@@ -86,7 +79,8 @@ class ProfileChipSection extends ConsumerWidget {
       ),
     );
     if (res != null && res.isNotEmpty) {
-      ref.read(provider.notifier).update((state) => [...state, res]);
+      final updated = List<String>.from(items)..add(res);
+      onChanged(updated);
     }
   }
 }
