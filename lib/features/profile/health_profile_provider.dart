@@ -1,10 +1,28 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'health_profile_model.dart';
 
-const _baseUrl = 'http://10.0.2.2:8000/api/v1';
+const String _apiBaseOverride = String.fromEnvironment(
+  'API_BASE_URL',
+  defaultValue: '',
+);
+
+String get _baseUrl {
+  if (_apiBaseOverride.isNotEmpty) {
+    return _apiBaseOverride; // should include full base like http://HOST:PORT/api/v1
+  }
+  // Use Android emulator loopback on Android, localhost elsewhere (including desktop/web)
+  if (kIsWeb) return 'http://localhost:8000/api/v1';
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.android:
+      return 'http://10.0.2.2:8000/api/v1';
+    default:
+      return 'http://localhost:8000/api/v1';
+  }
+}
 
 class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
   HealthProfileNotifier() : super(const AsyncValue.loading());
@@ -57,9 +75,9 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
   }
 
   Future<String?> _fetchUserId(String idToken) async {
-    final res = await http.get(
-      Uri.parse('$_baseUrl/auth/me?id_token=$idToken'),
-    );
+    final res = await http
+        .get(Uri.parse('$_baseUrl/auth/me?id_token=$idToken'))
+        .timeout(const Duration(seconds: 10));
     if (res.statusCode == 200) {
       final data = json.decode(res.body);
       return data['id'] as String?;
@@ -68,9 +86,9 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
   }
 
   Future<HealthProfile?> _fetchProfile(String idToken) async {
-    final res = await http.get(
-      Uri.parse('$_baseUrl/health-profile/me?id_token=$idToken'),
-    );
+    final res = await http
+        .get(Uri.parse('$_baseUrl/health-profile/me?id_token=$idToken'))
+        .timeout(const Duration(seconds: 10));
     if (res.statusCode == 200) {
       final data = json.decode(res.body);
       return HealthProfile.fromJson(data);
@@ -89,11 +107,13 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
       'chronic_conditions': [],
       'dietary_preferences': [],
     });
-    final res = await http.post(
-      Uri.parse('$_baseUrl/health-profile/me?id_token=$idToken'),
-      headers: {'Content-Type': 'application/json'},
-      body: body,
-    );
+    final res = await http
+        .post(
+          Uri.parse('$_baseUrl/health-profile/me?id_token=$idToken'),
+          headers: {'Content-Type': 'application/json'},
+          body: body,
+        )
+        .timeout(const Duration(seconds: 10));
     if (res.statusCode == 200 || res.statusCode == 201) {
       final data = json.decode(res.body);
       return HealthProfile.fromJson(data);
@@ -103,11 +123,13 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
 
   Future<void> _putProfile(String idToken, HealthProfile profile) async {
     final body = json.encode(profile.toJson());
-    final res = await http.put(
-      Uri.parse('$_baseUrl/health-profile/me?id_token=$idToken'),
-      headers: {'Content-Type': 'application/json'},
-      body: body,
-    );
+    final res = await http
+        .put(
+          Uri.parse('$_baseUrl/health-profile/me?id_token=$idToken'),
+          headers: {'Content-Type': 'application/json'},
+          body: body,
+        )
+        .timeout(const Duration(seconds: 10));
     if (res.statusCode != 200) {
       throw Exception('Failed to update profile');
     }

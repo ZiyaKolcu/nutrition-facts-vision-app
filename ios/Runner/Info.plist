@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to scan food labels.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Allow saving captured images to your photo library if needed.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow selecting images from your photo library for OCR.</string>
 </dict>
 </plist>

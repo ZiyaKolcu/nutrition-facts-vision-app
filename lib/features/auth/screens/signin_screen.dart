@@ -26,8 +26,9 @@ class _SignInScreenState extends State<SignInScreen> {
         email: _email.text.trim(),
         password: _pass.text.trim(),
       );
+      String? idToken = await FirebaseAuth.instance.currentUser?.getIdToken(true);
+      print(idToken);
 
-      // Giriş başarılı olduğunda AuthGate'e yönlendir
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const AuthGate()),
