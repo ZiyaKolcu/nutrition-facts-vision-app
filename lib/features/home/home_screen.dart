@@ -27,9 +27,9 @@ class HomeScreen extends ConsumerWidget {
       body: const ScanHistoryList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const ScanScreen()));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const ScanScreen()))
+              .then((_) => ref.invalidate(scansProvider));
         },
         child: const Icon(Icons.add),
       ),
