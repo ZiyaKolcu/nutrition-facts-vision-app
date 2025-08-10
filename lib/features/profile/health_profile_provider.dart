@@ -12,9 +12,8 @@ const String _apiBaseOverride = String.fromEnvironment(
 
 String get _baseUrl {
   if (_apiBaseOverride.isNotEmpty) {
-    return _apiBaseOverride; // should include full base like http://HOST:PORT/api/v1
+    return _apiBaseOverride; 
   }
-  // Use Android emulator loopback on Android, localhost elsewhere (including desktop/web)
   if (kIsWeb) return 'http://localhost:8000/api/v1';
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:

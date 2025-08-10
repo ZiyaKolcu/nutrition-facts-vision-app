@@ -27,6 +27,9 @@ class SettingsList extends StatelessWidget {
     if (confirmed == true && context.mounted) {
       try {
         await FirebaseAuth.instance.signOut();
+        if (!context.mounted) return;
+        // Navigate to root and let AuthGate rebuild to SignInScreen
+        Navigator.of(context).popUntil((route) => route.isFirst);
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(
