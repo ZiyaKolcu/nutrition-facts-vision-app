@@ -6,12 +6,12 @@ A Flutter mobile application that allows users to scan food labels and receive a
 
 - User authentication (Email/Password) with Firebase  
 - Profile screen with user information and settings 
-- Home screen with history of previous scans (mock implementation)
+- Home screen with history of previous scans 
 - Health risk analysis based on ingredients (mock implementation)
 - AI-powered insights using OpenAI GPT (mock implementation)
 - Analysis screen showing risk levels and summaries (mock implementation)
-- Scan food labels using the device camera (planned)
-- OCR recognition using Google ML Kit (planned)
+- Scan food labels using the device camera 
+- OCR recognition using Google ML Kit 
 
 ## Tech Stack
 
