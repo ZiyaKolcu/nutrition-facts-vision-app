@@ -61,30 +61,32 @@ class ScanScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   SizedBox(
                     height: 48,
-                    child: ElevatedButton(
-                      onPressed: scanState.isProcessing
-                          ? null
-                          : () async {
-                              await controller.analyze();
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Grouped OCR sent to backend (stub).',
+                    child: Builder(
+                      builder: (context) {
+                        final bool anyPhotoProcessing = scanState.photos.any(
+                          (p) => p.isProcessing,
+                        );
+                        return ElevatedButton(
+                          onPressed:
+                              (scanState.isProcessing || anyPhotoProcessing)
+                              ? null
+                              : () async {
+                                  await controller.analyze();
+                                  if (!context.mounted) return;
+                                  Navigator.pop(context);
+                                },
+                          child: (scanState.isProcessing || anyPhotoProcessing)
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
                                   ),
-                                ),
-                              );
-                            },
-                      child: scanState.isProcessing
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text('Analyze'),
+                                )
+                              : const Text('Analyze'),
+                        );
+                      },
                     ),
                   ),
                 ],

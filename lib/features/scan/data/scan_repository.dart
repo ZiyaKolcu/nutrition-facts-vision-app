@@ -1,48 +1,73 @@
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+
+const String _apiBaseOverride = String.fromEnvironment(
+  'API_BASE_URL',
+  defaultValue: '',
+);
+
+String get _baseUrl {
+  if (_apiBaseOverride.isNotEmpty) {
+    return _apiBaseOverride;
+  }
+  if (kIsWeb) return 'http://localhost:8000/api/v1';
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.android:
+      return 'http://10.0.2.2:8000/api/v1';
+    default:
+      return 'http://localhost:8000/api/v1';
+  }
+}
 
 class ScanRepository {
-  final String baseUrl;
   final http.Client httpClient;
 
-  ScanRepository({
-    this.baseUrl = 'http://10.0.2.2:8000',
-    http.Client? httpClient,
-  }) : httpClient = httpClient ?? http.Client();
+  ScanRepository({http.Client? httpClient})
+    : httpClient = httpClient ?? http.Client();
 
-  /// Analyzes one or multiple photos/texts
-  /// Works for both single and multiple items
   Future<void> analyze({
     required List<ScanGroupItem> items,
-    String? title,
+    required String title,
+    String? barcode,
   }) async {
-    // Placeholder for future FastAPI integration.
-    // Keep signature and basic request structure ready.
-    // final Uri url = Uri.parse('$baseUrl/analyze');
-    // final Map<String, dynamic> payload = {
-    //   if (title != null && title.isNotEmpty) 'title': title,
-    //   'items': items
-    //       .map((item) => {
-    //             'image_path': item.imagePath,
-    //             'ingredients_text': item.text,
-    //           })
-    //       .toList(),
-    // };
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? idToken = await user?.getIdToken();
+    if (idToken == null || idToken.isEmpty) {
+      throw Exception('No idToken');
+    }
 
-    // Intentionally not awaiting a real backend in this phase; return early if baseUrl not reachable.
+    final uri = Uri.parse(
+      '$_baseUrl/scans/analyze',
+    ).replace(queryParameters: {'id_token': idToken});
+
+    final String rawText = items
+        .map((i) => i.text.trim())
+        .where((t) => t.isNotEmpty)
+        .join('\n\n');
+
+    final payload = <String, dynamic>{
+      'title': title,
+      'raw_text': rawText,
+      if (barcode != null && barcode.isNotEmpty) 'barcode': barcode,
+    };
+
     try {
-      // Commented out actual request to avoid errors if backend is not running.
-      // final http.Response response = await httpClient.post(
-      //   url,
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: jsonEncode(payload),
-      // );
-      //
-      // if (response.statusCode < 200 || response.statusCode >= 300) {
-      //   throw Exception('Backend error: ${response.statusCode}');
-      // }
-    } catch (_) {
-      // Swallow errors for now since backend may not be running during UI development.
+      final response = await httpClient
+          .post(
+            uri,
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(payload),
+          )
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw Exception('Backend error: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Analyze request failed: $e');
+      rethrow;
     }
   }
 }

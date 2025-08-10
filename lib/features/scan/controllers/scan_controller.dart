@@ -140,6 +140,7 @@ class ScanController extends StateNotifier<ScanState> {
   }
 
   Future<void> analyze() async {
+    state = state.copyWith(isProcessing: true, errorMessage: null);
     final repo = ref.read(scanRepositoryProvider);
     final items = state.photos
         .map(
@@ -150,7 +151,13 @@ class ScanController extends StateNotifier<ScanState> {
         )
         .toList(growable: false);
 
-    await repo.analyze(items: items, title: state.title);
+    try {
+      await repo.analyze(items: items, title: state.title);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    } finally {
+      state = state.copyWith(isProcessing: false);
+    }
   }
 }
 
