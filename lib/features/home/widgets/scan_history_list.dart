@@ -86,11 +86,16 @@ final scansProvider = FutureProvider<List<ScanSummary>>((ref) async {
   throw Exception('Failed to fetch scans (${response.statusCode})');
 });
 
-class ScanHistoryList extends ConsumerWidget {
+class ScanHistoryList extends ConsumerStatefulWidget {
   const ScanHistoryList({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ScanHistoryList> createState() => _ScanHistoryListState();
+}
+
+class _ScanHistoryListState extends ConsumerState<ScanHistoryList> {
+  @override
+  Widget build(BuildContext context) {
     final scansAsync = ref.watch(scansProvider);
     return scansAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -118,14 +123,16 @@ class ScanHistoryList extends ConsumerWidget {
               date: item.createdAt,
               onDelete: () async {
                 if (item.scanId.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Scan id missing, cannot delete'),
-                    ),
-                  );
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Scan id missing, cannot delete'),
+                      ),
+                    );
+                  }
                   return;
                 }
-                await _deleteScan(context, ref, item.scanId);
+                await _deleteScan(item.scanId);
               },
             );
           },
@@ -133,40 +140,32 @@ class ScanHistoryList extends ConsumerWidget {
       },
     );
   }
-}
 
-Future<void> _deleteScan(
-  BuildContext context,
-  WidgetRef ref,
-  String scanId,
-) async {
-  if (scanId.isEmpty) return;
-  try {
-    ScaffoldMessenger.of(
-      context,
-    );
-    final String? idToken = await FirebaseAuth.instance.currentUser
-        ?.getIdToken();
-    if (idToken == null || idToken.isEmpty) {
-      throw Exception('No idToken');
+  Future<void> _deleteScan(String scanId) async {
+    if (scanId.isEmpty) return;
+    try {
+      final String? idToken = await FirebaseAuth.instance.currentUser
+          ?.getIdToken();
+      if (idToken == null || idToken.isEmpty) {
+        throw Exception('No idToken');
+      }
+      final uri = Uri.parse(
+        '$_baseUrl/scans/$scanId',
+      ).replace(queryParameters: {'id_token': idToken});
+      final res = await http
+          .delete(uri, headers: {'Content-Type': 'application/json'})
+          .timeout(const Duration(seconds: 15));
+      if (res.statusCode == 200 || res.statusCode == 204) {
+        ref.invalidate(scansProvider);
+        return;
+      }
+      throw Exception('Failed (${res.statusCode})');
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Delete failed: $e')));
+      }
     }
-    final uri = Uri.parse(
-      '$_baseUrl/scans/$scanId',
-    ).replace(queryParameters: {'id_token': idToken});
-    final res = await http
-        .delete(uri, headers: {'Content-Type': 'application/json'})
-        .timeout(const Duration(seconds: 15));
-    if (res.statusCode == 200 || res.statusCode == 204) {
-      ref.invalidate(scansProvider);
-      ScaffoldMessenger.of(
-        context,
-      );
-      return;
-    }
-    throw Exception('Failed (${res.statusCode})');
-  } catch (e) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Delete failed: $e')));
   }
 }
