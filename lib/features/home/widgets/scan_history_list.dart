@@ -119,6 +119,7 @@ class _ScanHistoryListState extends ConsumerState<ScanHistoryList> {
           itemBuilder: (context, index) {
             final item = scans[index];
             return ScanItemCard(
+              scanId: item.scanId,
               title: item.productName,
               date: item.createdAt,
               onDelete: () async {

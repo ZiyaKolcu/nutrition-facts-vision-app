@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import '../../analysis/analysis_screen.dart';
 
 class ScanItemCard extends StatelessWidget {
+  final String scanId;
   final String title;
   final DateTime? date;
   final Future<void> Function()? onDelete;
 
   const ScanItemCard({
     super.key,
+    required this.scanId,
     required this.title,
     this.date,
     this.onDelete,
@@ -66,9 +68,11 @@ class ScanItemCard extends StatelessWidget {
           ],
         ),
         onTap: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const AnalysisScreen()));
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => AnalysisScreen(scanId: scanId, title: title),
+            ),
+          );
         },
       ),
     );

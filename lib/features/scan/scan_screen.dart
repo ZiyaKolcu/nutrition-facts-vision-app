@@ -24,7 +24,7 @@ class ScanScreen extends ConsumerWidget {
                 children: [
                   TextField(
                     decoration: const InputDecoration(
-                      labelText: 'Nutrition Facts Title',
+                      labelText: 'Title',
                       hintText: 'Enter a title for the nutrition facts',
                       border: OutlineInputBorder(),
                     ),
