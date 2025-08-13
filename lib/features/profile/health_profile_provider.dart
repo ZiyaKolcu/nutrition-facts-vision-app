@@ -1,27 +1,11 @@
-import 'package:flutter/foundation.dart';
+import '../../core/utils/api_base.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'health_profile_model.dart';
 
-const String _apiBaseOverride = String.fromEnvironment(
-  'API_BASE_URL',
-  defaultValue: '',
-);
-
-String get _baseUrl {
-  if (_apiBaseOverride.isNotEmpty) {
-    return _apiBaseOverride; 
-  }
-  if (kIsWeb) return 'http://localhost:8000/api/v1';
-  switch (defaultTargetPlatform) {
-    case TargetPlatform.android:
-      return 'http://10.0.2.2:8000/api/v1';
-    default:
-      return 'http://localhost:8000/api/v1';
-  }
-}
+String get _baseUrl => getApiBase();
 
 class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
   HealthProfileNotifier() : super(const AsyncValue.loading());

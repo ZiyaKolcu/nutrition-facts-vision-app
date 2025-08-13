@@ -1,28 +1,12 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'scan_item_card.dart';
+import '../../../core/utils/api_base.dart';
 
-const String _apiBaseOverride = String.fromEnvironment(
-  'API_BASE_URL',
-  defaultValue: '',
-);
-
-String get _baseUrl {
-  if (_apiBaseOverride.isNotEmpty) {
-    return _apiBaseOverride;
-  }
-  if (kIsWeb) return 'http://localhost:8000/api/v1';
-  switch (defaultTargetPlatform) {
-    case TargetPlatform.android:
-      return 'http://10.0.2.2:8000/api/v1';
-    default:
-      return 'http://localhost:8000/api/v1';
-  }
-}
+String get _baseUrl => getApiBase();
 
 class ScanSummary {
   final String scanId;

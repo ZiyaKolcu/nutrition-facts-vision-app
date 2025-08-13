@@ -26,8 +26,6 @@ class _SignInScreenState extends State<SignInScreen> {
         email: _email.text.trim(),
         password: _pass.text.trim(),
       );
-      String? idToken = await FirebaseAuth.instance.currentUser?.getIdToken(true);
-      print(idToken);
 
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
