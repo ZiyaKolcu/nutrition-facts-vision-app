@@ -1,9 +1,10 @@
-import '../../core/utils/api_base.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'health_profile_model.dart';
+
+import '../../../core/utils/api_base.dart';
+import '../models/health_profile.dart';
 
 String get _baseUrl => getApiBase();
 

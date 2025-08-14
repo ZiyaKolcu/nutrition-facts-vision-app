@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'widgets/scan_history_list.dart';
-import '../profile/profile_screen.dart';
+import '../profile/views/profile_view.dart';
 import '../scan/scan_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -18,7 +18,7 @@ class HomeScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.of(
                 context,
-              ).push(MaterialPageRoute(builder: (_) => const ProfileScreen()));
+              ).push(MaterialPageRoute(builder: (_) => const ProfileView()));
             },
             tooltip: 'Profile',
           ),

@@ -28,33 +28,12 @@ class SettingsList extends StatelessWidget {
       try {
         await FirebaseAuth.instance.signOut();
         if (!context.mounted) return;
-        // Navigate to root and let AuthGate rebuild to SignInScreen
         Navigator.of(context).popUntil((route) => route.isFirst);
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text('Sign out failed: $e')));
-        }
-      }
-    }
-  }
-
-  Future<void> _sendEmailVerification(BuildContext context) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null && !user.emailVerified) {
-      try {
-        await user.sendEmailVerification();
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Verification email sent!')),
-          );
-        }
-      } catch (e) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to send verification: $e')),
-          );
         }
       }
     }
@@ -73,15 +52,6 @@ class SettingsList extends StatelessWidget {
         const _SettingsTile(Icons.person_outline, 'Edit Profile'),
         const _SettingsTile(Icons.notifications_none, 'Notifications'),
         const _SettingsTile(Icons.lock_outline, 'Privacy & Security'),
-
-        if (user != null && !user.emailVerified)
-          _SettingsTile(
-            Icons.mark_email_unread,
-            'Verify Email',
-            onTap: () => _sendEmailVerification(context),
-          ),
-
-        const _SettingsTile(Icons.help_outline, 'Help Center'),
         const _SettingsTile(Icons.info_outline, 'About'),
         const SizedBox(height: 16),
 
@@ -159,9 +129,8 @@ class SettingsList extends StatelessWidget {
 class _SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
-  final VoidCallback? onTap;
 
-  const _SettingsTile(this.icon, this.title, {this.onTap});
+  const _SettingsTile(this.icon, this.title);
 
   @override
   Widget build(BuildContext context) {
@@ -169,11 +138,9 @@ class _SettingsTile extends StatelessWidget {
       leading: Icon(icon, color: context.colors.primary),
       title: Text(title),
       trailing: const Icon(Icons.chevron_right),
-      onTap:
-          onTap ??
-          () {
-            /* todo */
-          },
+      onTap: () {
+        /* todo */
+      },
     );
   }
 }

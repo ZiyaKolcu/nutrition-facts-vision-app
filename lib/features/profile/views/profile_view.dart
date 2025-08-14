@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'widgets/profile_avatar_section.dart';
-import 'widgets/profile_settings_list.dart';
-import 'widgets/profile_chip_section.dart';
-import 'health_profile_provider.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
-  const ProfileScreen({super.key});
+import '../controllers/health_profile_notifier.dart';
+import '../widgets/profile_avatar_section.dart';
+import '../widgets/profile_settings_list.dart';
+import '../widgets/profile_chip_section.dart';
+
+class ProfileView extends ConsumerStatefulWidget {
+  const ProfileView({super.key});
 
   @override
-  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileView> createState() => _ProfileViewState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+class _ProfileViewState extends ConsumerState<ProfileView> {
   @override
   void initState() {
     super.initState();
@@ -62,7 +63,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   padding: const EdgeInsets.all(16),
                   children: [
                     const ProfileAvatarSection(),
-                    const SizedBox(height: 24),
                     ProfileChipSection(
                       title: 'Allergies',
                       items: profile.allergies,
