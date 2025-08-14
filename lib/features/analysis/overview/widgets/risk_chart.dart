@@ -1,7 +1,6 @@
-// risk_chart.dart
 import 'package:flutter/material.dart';
-import '../../../core/theme/theme_extensions.dart';
-import '../scan_detail_model.dart';
+import '../../../../core/theme/theme_extensions.dart';
+import '../models/scan_detail_model.dart';
 
 class RiskChart extends StatelessWidget {
   final List<Nutrient> nutrients;

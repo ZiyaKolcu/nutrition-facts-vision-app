@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../scan_detail_model.dart';
+import '../models/scan_detail_model.dart';
 import 'ingredient_risk_card.dart';
 
 class IngredientRiskCardList extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/theme_extensions.dart';
+import '../../../../core/theme/theme_extensions.dart';
 
 class AiSummaryCard extends StatelessWidget {
   final String summary;
