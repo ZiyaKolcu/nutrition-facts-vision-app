@@ -1,7 +1,7 @@
 class HealthProfile {
   final String userId;
   final List<String> allergies;
-  final List<String> chronicConditions;
+  final List<String> healthConditions;
   final List<String> dietaryPreferences;
   final int? age;
   final String? gender;
@@ -11,7 +11,7 @@ class HealthProfile {
   HealthProfile({
     required this.userId,
     required this.allergies,
-    required this.chronicConditions,
+    required this.healthConditions,
     required this.dietaryPreferences,
     this.age,
     this.gender,
@@ -22,7 +22,7 @@ class HealthProfile {
   factory HealthProfile.fromJson(Map<String, dynamic> json) => HealthProfile(
     userId: json['user_id'] ?? '',
     allergies: List<String>.from(json['allergies'] ?? []),
-    chronicConditions: List<String>.from(json['chronic_conditions'] ?? []),
+    healthConditions: List<String>.from(json['health_conditions'] ?? []),
     dietaryPreferences: List<String>.from(json['dietary_preferences'] ?? []),
     age: json['age'],
     gender: json['gender'],
@@ -33,7 +33,7 @@ class HealthProfile {
   Map<String, dynamic> toJson() => {
     'user_id': userId,
     'allergies': allergies,
-    'chronic_conditions': chronicConditions,
+    'health_conditions': healthConditions,
     'dietary_preferences': dietaryPreferences,
     'age': age ?? 0,
     'gender': gender ?? '',
@@ -43,7 +43,7 @@ class HealthProfile {
 
   HealthProfile copyWith({
     List<String>? allergies,
-    List<String>? chronicConditions,
+    List<String>? healthConditions,
     List<String>? dietaryPreferences,
     int? age,
     String? gender,
@@ -53,7 +53,7 @@ class HealthProfile {
     return HealthProfile(
       userId: userId,
       allergies: allergies ?? this.allergies,
-      chronicConditions: chronicConditions ?? this.chronicConditions,
+      healthConditions: healthConditions ?? this.healthConditions,
       dietaryPreferences: dietaryPreferences ?? this.dietaryPreferences,
       age: age ?? this.age,
       gender: gender ?? this.gender,

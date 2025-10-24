@@ -31,7 +31,7 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
 
   Future<void> updateProfileField({
     List<String>? allergies,
-    List<String>? chronicConditions,
+    List<String>? healthConditions,
     List<String>? dietaryPreferences,
     int? age,
     String? gender,
@@ -42,7 +42,7 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
     if (current == null || _idToken == null || _userId == null) return;
     final updated = current.copyWith(
       allergies: allergies,
-      chronicConditions: chronicConditions,
+      healthConditions: healthConditions,
       dietaryPreferences: dietaryPreferences,
       age: age,
       gender: gender,
@@ -88,7 +88,7 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
     final body = json.encode({
       'user_id': _userId,
       'allergies': [],
-      'chronic_conditions': [],
+      'health_conditions': [],
       'dietary_preferences': [],
     });
     final res = await http

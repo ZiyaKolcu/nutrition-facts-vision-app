@@ -73,11 +73,11 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                     ),
                     ProfileChipSection(
                       title: 'Health Conditions',
-                      items: profile.chronicConditions,
+                      items: profile.healthConditions,
                       icon: Icons.medical_services,
                       onChanged: (list) => ref
                           .read(healthProfileProvider.notifier)
-                          .updateProfileField(chronicConditions: list),
+                          .updateProfileField(healthConditions: list),
                     ),
                     ProfileChipSection(
                       title: 'Dietary Preferences',
