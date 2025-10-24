@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../home/home_screen.dart';
+import '../../../core/navigation/main_navigation.dart';
 import 'signin_screen.dart';
 
 class AuthGate extends ConsumerWidget {
@@ -25,7 +25,7 @@ class AuthGate extends ConsumerWidget {
         }
 
         if (snapshot.hasData && snapshot.data != null) {
-          return const HomeScreen();
+          return const MainNavigation();
         }
 
         return const SignInScreen();

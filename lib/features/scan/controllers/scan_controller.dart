@@ -159,6 +159,11 @@ class ScanController extends StateNotifier<ScanState> {
       state = state.copyWith(isProcessing: false);
     }
   }
+
+  void reset() {
+    state = const ScanState();
+    _idCounter = 0;
+  }
 }
 
 final ocrServiceProvider = Provider<OcrService>((ref) => OcrService());

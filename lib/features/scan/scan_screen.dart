@@ -2,27 +2,50 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'controllers/scan_controller.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/navigation/main_navigation.dart';
+import '../home/widgets/scan_history_list.dart';
 
-class ScanScreen extends ConsumerWidget {
+class ScanScreen extends ConsumerStatefulWidget {
   const ScanScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ScanScreen> createState() => _ScanScreenState();
+}
+
+class _ScanScreenState extends ConsumerState<ScanScreen> {
+  final TextEditingController _titleController = TextEditingController();
+  bool _showPhotoOptions = false;
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
+  void _togglePhotoOptions() {
+    setState(() {
+      _showPhotoOptions = !_showPhotoOptions;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final ScanState scanState = ref.watch(scanControllerProvider);
     final ScanController controller = ref.read(scanControllerProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('New Scan')),
+      appBar: AppBar(
+        title: const Text('New Scan'),
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
                   TextField(
+                    controller: _titleController,
                     decoration: const InputDecoration(
                       labelText: 'Title',
                       hintText: 'Enter a title for the nutrition facts',
@@ -49,59 +72,119 @@ class ScanScreen extends ConsumerWidget {
                             },
                           ),
                   ),
-                  if (scanState.errorMessage != null) ...[
-                    const SizedBox(height: 8),
-                    Text(
-                      scanState.errorMessage!,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color: AppColors.error),
-                    ),
-                  ],
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 48,
-                    child: Builder(
-                      builder: (context) {
-                        final bool anyPhotoProcessing = scanState.photos.any(
-                          (p) => p.isProcessing,
-                        );
-                        return ElevatedButton(
-                          onPressed:
-                              (scanState.isProcessing || anyPhotoProcessing)
-                              ? null
-                              : () async {
-                                  await controller.analyze();
-                                  if (!context.mounted) return;
-                                  Navigator.pop(context);
-                                },
-                          child: (scanState.isProcessing || anyPhotoProcessing)
-                              ? const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text('Analyze'),
-                        );
-                      },
-                    ),
+              if (scanState.errorMessage != null) ...[
+                const SizedBox(height: 8),
+                Text(
+                  scanState.errorMessage!,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.error,
                   ),
-                ],
+                ),
+              ],
+              const SizedBox(height: 8),
+              // Photo options (Camera/Gallery)
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                child: _showPhotoOptions
+                    ? Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  onPressed: scanState.isProcessing
+                                      ? null
+                                      : () {
+                                          _togglePhotoOptions();
+                                          controller.pickImageFromCamera();
+                                        },
+                                  icon: const Icon(Icons.photo_camera),
+                                  label: const Text('Camera'),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: OutlinedButton.icon(
+                                  onPressed: scanState.isProcessing
+                                      ? null
+                                      : () {
+                                          _togglePhotoOptions();
+                                          controller.pickImagesFromGallery();
+                                        },
+                                  icon: const Icon(Icons.collections),
+                                  label: const Text('Gallery'),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
               ),
-            ),
-            Positioned(
-              right: 16,
-              bottom: 80, // leave room for Analyze button
-              child: _AddPhotoFab(
-                disabled: scanState.isProcessing,
-                onCamera: controller.pickImageFromCamera,
-                onGallery: controller.pickImagesFromGallery,
+              // Action buttons row
+              SizedBox(
+                height: 48,
+                child: Builder(
+                  builder: (context) {
+                    final bool anyPhotoProcessing = scanState.photos.any(
+                      (p) => p.isProcessing,
+                    );
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: scanState.isProcessing
+                                ? null
+                                : _togglePhotoOptions,
+                            icon: Icon(
+                              _showPhotoOptions
+                                  ? Icons.close
+                                  : Icons.add_photo_alternate,
+                            ),
+                            label: const Text('Add Photo'),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed:
+                                (scanState.isProcessing || anyPhotoProcessing)
+                                ? null
+                                : () async {
+                                    await controller.analyze();
+                                    if (!context.mounted) return;
+                                    // Check if analysis was successful (no error)
+                                    final finalState = ref.read(scanControllerProvider);
+                                    if (finalState.errorMessage == null) {
+                                      // Clear the scan form
+                                      controller.reset();
+                                      _titleController.clear();
+                                      // Refresh home screen
+                                      ref.invalidate(scansProvider);
+                                      // Switch to home tab
+                                      ref.read(currentTabIndexProvider.notifier).state = 1;
+                                    }
+                                  },
+                            child: (scanState.isProcessing || anyPhotoProcessing)
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Text('Analyze'),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -176,110 +259,3 @@ class _PhotoCard extends StatelessWidget {
   }
 }
 
-class _AddPhotoFab extends StatefulWidget {
-  final bool disabled;
-  final VoidCallback onCamera;
-  final VoidCallback onGallery;
-
-  const _AddPhotoFab({
-    required this.disabled,
-    required this.onCamera,
-    required this.onGallery,
-  });
-
-  @override
-  State<_AddPhotoFab> createState() => _AddPhotoFabState();
-}
-
-class _AddPhotoFabState extends State<_AddPhotoFab>
-    with SingleTickerProviderStateMixin {
-  bool _expanded = false;
-
-  void _toggle() {
-    if (widget.disabled) return;
-    setState(() {
-      _expanded = !_expanded;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        AnimatedSlide(
-          duration: const Duration(milliseconds: 180),
-          offset: _expanded ? Offset.zero : const Offset(0, 0.2),
-          child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 180),
-            opacity: _expanded ? 1 : 0,
-            child: _ActionButton(
-              icon: Icons.photo_camera,
-              label: 'Camera',
-              onPressed: widget.disabled
-                  ? null
-                  : () {
-                      _toggle();
-                      widget.onCamera();
-                    },
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        AnimatedSlide(
-          duration: const Duration(milliseconds: 180),
-          offset: _expanded ? Offset.zero : const Offset(0, 0.2),
-          child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 180),
-            opacity: _expanded ? 1 : 0,
-            child: _ActionButton(
-              icon: Icons.collections,
-              label: 'Gallery',
-              onPressed: widget.disabled
-                  ? null
-                  : () {
-                      _toggle();
-                      widget.onGallery();
-                    },
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        FloatingActionButton.extended(
-          heroTag: 'addPhotoFab',
-          onPressed: widget.disabled ? null : _toggle,
-          icon: Icon(_expanded ? Icons.close : Icons.add_photo_alternate),
-          label: const Text('Add Photo'),
-        ),
-      ],
-    );
-  }
-}
-
-class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback? onPressed;
-
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, size: 18),
-      label: Text(label),
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        minimumSize: const Size(140, 40),
-        shape: const StadiumBorder(),
-        elevation: 2,
-      ),
-    );
-  }
-}
