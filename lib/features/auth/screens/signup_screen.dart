@@ -4,7 +4,7 @@ import '../widgets/auth_header.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/auth_button.dart';
 import 'signin_screen.dart';
-import 'auth_gate.dart';
+import '../../profile_setup/views/profile_setup_view.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -44,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const AuthGate()),
+          MaterialPageRoute(builder: (context) => const ProfileSetupView()),
           (route) => false,
         );
       }

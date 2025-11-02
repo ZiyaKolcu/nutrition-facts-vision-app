@@ -112,10 +112,6 @@ class ProfileInfoSection extends StatelessWidget {
                             value: 'Female',
                             child: Text('Female'),
                           ),
-                          DropdownMenuItem(
-                            value: 'Other',
-                            child: Text('Other'),
-                          ),
                         ],
                         onChanged: onGenderChanged,
                       ),
