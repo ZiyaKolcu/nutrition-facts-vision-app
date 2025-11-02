@@ -109,9 +109,6 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
     final jsonData = profile.toJson();
     final body = json.encode(jsonData);
 
-    // Debug: Print what we're sending
-    print('Sending to backend: $jsonData');
-
     final res = await http
         .put(
           Uri.parse('$_baseUrl/health-profile/me?id_token=$idToken'),
@@ -119,9 +116,6 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
           body: body,
         )
         .timeout(const Duration(seconds: 10));
-
-    print('Response status: ${res.statusCode}');
-    print('Response body: ${res.body}');
 
     if (res.statusCode != 200) {
       throw Exception('Failed to update profile');
