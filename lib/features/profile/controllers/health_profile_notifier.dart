@@ -33,8 +33,8 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
     List<String>? allergies,
     List<String>? healthConditions,
     List<String>? dietaryPreferences,
-    int? age,
     String? gender,
+    DateTime? dateOfBirth,
     int? heightCm,
     int? weightKg,
   }) async {
@@ -44,8 +44,8 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
       allergies: allergies,
       healthConditions: healthConditions,
       dietaryPreferences: dietaryPreferences,
-      age: age,
       gender: gender,
+      dateOfBirth: dateOfBirth,
       heightCm: heightCm,
       weightKg: weightKg,
     );
@@ -106,7 +106,12 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
   }
 
   Future<void> _putProfile(String idToken, HealthProfile profile) async {
-    final body = json.encode(profile.toJson());
+    final jsonData = profile.toJson();
+    final body = json.encode(jsonData);
+
+    // Debug: Print what we're sending
+    print('Sending to backend: $jsonData');
+
     final res = await http
         .put(
           Uri.parse('$_baseUrl/health-profile/me?id_token=$idToken'),
@@ -114,6 +119,10 @@ class HealthProfileNotifier extends StateNotifier<AsyncValue<HealthProfile?>> {
           body: body,
         )
         .timeout(const Duration(seconds: 10));
+
+    print('Response status: ${res.statusCode}');
+    print('Response body: ${res.body}');
+
     if (res.statusCode != 200) {
       throw Exception('Failed to update profile');
     }

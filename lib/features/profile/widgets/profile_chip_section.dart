@@ -4,14 +4,12 @@ import '../../../core/theme/theme_extensions.dart';
 class ProfileChipSection extends StatelessWidget {
   final String title;
   final List<String> items;
-  final IconData icon;
   final void Function(List<String>) onChanged;
 
   const ProfileChipSection({
     super.key,
     required this.title,
     required this.items,
-    required this.icon,
     required this.onChanged,
   });
 
@@ -25,8 +23,6 @@ class ProfileChipSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(icon, size: 18, color: colors.primary),
-            const SizedBox(width: 6),
             Text(title, style: text.titleSmall),
             const Spacer(),
             IconButton(

@@ -6,6 +6,7 @@ import '../controllers/health_profile_notifier.dart';
 import '../widgets/profile_avatar_section.dart';
 import '../widgets/profile_settings_list.dart';
 import '../widgets/profile_chip_section.dart';
+import '../widgets/profile_info_section.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -63,10 +64,26 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                   padding: const EdgeInsets.all(16),
                   children: [
                     const ProfileAvatarSection(),
+                    const SizedBox(height: 16),
+                    ProfileInfoSection(
+                      profile: profile,
+                      onDateOfBirthChanged: (date) => ref
+                          .read(healthProfileProvider.notifier)
+                          .updateProfileField(dateOfBirth: date),
+                      onGenderChanged: (gender) => ref
+                          .read(healthProfileProvider.notifier)
+                          .updateProfileField(gender: gender),
+                      onHeightChanged: (height) => ref
+                          .read(healthProfileProvider.notifier)
+                          .updateProfileField(heightCm: height),
+                      onWeightChanged: (weight) => ref
+                          .read(healthProfileProvider.notifier)
+                          .updateProfileField(weightKg: weight),
+                    ),
+                    const SizedBox(height: 16),
                     ProfileChipSection(
                       title: 'Allergies',
                       items: profile.allergies,
-                      icon: Icons.warning,
                       onChanged: (list) => ref
                           .read(healthProfileProvider.notifier)
                           .updateProfileField(allergies: list),
@@ -74,7 +91,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                     ProfileChipSection(
                       title: 'Health Conditions',
                       items: profile.healthConditions,
-                      icon: Icons.medical_services,
                       onChanged: (list) => ref
                           .read(healthProfileProvider.notifier)
                           .updateProfileField(healthConditions: list),
@@ -82,7 +98,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                     ProfileChipSection(
                       title: 'Dietary Preferences',
                       items: profile.dietaryPreferences,
-                      icon: Icons.restaurant,
                       onChanged: (list) => ref
                           .read(healthProfileProvider.notifier)
                           .updateProfileField(dietaryPreferences: list),
