@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../controllers/scan_detail_provider.dart';
 import '../widgets/ai_summary_card.dart';
-import '../widgets/ingredient_risk_card_list.dart';
+import '../widgets/ingredient_risk_chip_list.dart';
 import '../widgets/risk_chart.dart';
 
 class OverviewTabView extends ConsumerWidget {
@@ -24,7 +24,7 @@ class OverviewTabView extends ConsumerWidget {
               summary: scan.summaryExplanation ?? 'No summary available.',
             ),
             const SizedBox(height: 16),
-            IngredientRiskCardList(ingredients: scan.ingredients),
+            IngredientRiskChipList(ingredients: scan.ingredients),
             const SizedBox(height: 16),
             RiskChart(nutrients: scan.nutrients),
           ],
@@ -33,3 +33,4 @@ class OverviewTabView extends ConsumerWidget {
     );
   }
 }
+

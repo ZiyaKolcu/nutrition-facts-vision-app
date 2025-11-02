@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import '../models/scan_detail_model.dart';
-import 'ingredient_risk_card.dart';
+import 'ingredient_risk_chip.dart';
 
-class IngredientRiskCardList extends StatelessWidget {
+class IngredientRiskChipList extends StatelessWidget {
   final List<Ingredient> ingredients;
-  const IngredientRiskCardList({super.key, required this.ingredients});
+  const IngredientRiskChipList({super.key, required this.ingredients});
 
   @override
   Widget build(BuildContext context) {
     if (ingredients.isEmpty) {
       return const Text('No ingredient data available');
     }
-    return Column(
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
       children: ingredients
           .map(
-            (ingredient) => IngredientRiskCard(
+            (ingredient) => IngredientRiskChip(
               name: ingredient.name,
               level: ingredient.riskLevel,
             ),

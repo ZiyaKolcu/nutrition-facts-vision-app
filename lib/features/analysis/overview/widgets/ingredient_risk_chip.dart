@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/theme_extensions.dart';
 
-class IngredientRiskCard extends StatelessWidget {
+class IngredientRiskChip extends StatelessWidget {
   final String name;
   final String level;
-  const IngredientRiskCard({
+  const IngredientRiskChip({
     super.key,
     required this.name,
     required this.level,
@@ -27,20 +27,14 @@ class IngredientRiskCard extends StatelessWidget {
     final text = context.textStyles;
     final color = _color(context);
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: color.withValues(alpha: 0.2),
-          child: Icon(Icons.warning, color: color),
-        ),
-        title: Text(name, style: text.bodyLarge),
-        trailing: Chip(
-          label: Text(level, style: text.labelSmall),
-          backgroundColor: color.withValues(alpha: .2),
-          labelStyle: TextStyle(color: color),
-        ),
-      ),
+    return Chip(
+      label: Text(name, style: text.bodyMedium),
+      backgroundColor: Colors.transparent,
+      side: BorderSide(color: color, width: 2),
+      shape: const StadiumBorder(),
+      labelStyle: TextStyle(color: color),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
     );
   }
 }
