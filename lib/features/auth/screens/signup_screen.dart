@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../l10n/app_localizations.dart';
 import '../widgets/auth_header.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/auth_button.dart';
@@ -23,11 +24,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final l10n = AppLocalizations.of(context)!;
     if (_pass.text != _confirm.text) {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+        ).showSnackBar(SnackBar(content: Text(l10n.passwordsDoNotMatch)));
       }
       return;
     }
@@ -52,7 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(e.message ?? 'Sign-up failed')));
+        ).showSnackBar(SnackBar(content: Text(e.message ?? l10n.signUpFailed)));
       }
     }
   }
@@ -68,8 +70,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(title: Text(l10n.signUp)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -77,49 +80,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const AuthHeader(
-                  title: 'Create account',
-                  subtitle: 'Quick & secure',
+                AuthHeader(
+                  title: l10n.createAccount,
+                  subtitle: l10n.createAccountSubtitle,
                 ),
                 const SizedBox(height: 32),
                 AuthTextField(
-                  label: 'Name',
+                  label: l10n.name,
                   controller: _displayName,
                   validator: (v) =>
-                      v!.isEmpty ? 'Please enter your display name' : null,
+                      v!.isEmpty ? l10n.pleaseEnterDisplayName : null,
                 ),
                 const SizedBox(height: 16),
                 AuthTextField(
-                  label: 'Email',
+                  label: l10n.email,
                   controller: _email,
-                  validator: (v) =>
-                      v!.isEmpty ? 'Please enter your email' : null,
+                  validator: (v) => v!.isEmpty ? l10n.pleaseEnterEmail : null,
                 ),
                 const SizedBox(height: 16),
                 AuthTextField(
-                  label: 'Password',
+                  label: l10n.password,
                   obscureText: true,
                   controller: _pass,
                   validator: (v) =>
-                      v!.length < 6 ? 'Minimum 6 characters' : null,
+                      v!.length < 6 ? l10n.minimumCharacters : null,
                 ),
                 const SizedBox(height: 16),
                 AuthTextField(
-                  label: 'Confirm password',
+                  label: l10n.confirmPassword,
                   obscureText: true,
                   controller: _confirm,
                   validator: (v) =>
-                      v!.isEmpty ? 'Please confirm your password' : null,
+                      v!.isEmpty ? l10n.pleaseConfirmPassword : null,
                 ),
                 const SizedBox(height: 32),
-                AuthButton(text: 'Create Account', onPressed: _signUp),
+                AuthButton(text: l10n.signUp, onPressed: _signUp),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () => Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (_) => const SignInScreen()),
                   ),
-                  child: const Text('Already have an account? Sign in'),
+                  child: Text(l10n.alreadyHaveAccount),
                 ),
               ],
             ),

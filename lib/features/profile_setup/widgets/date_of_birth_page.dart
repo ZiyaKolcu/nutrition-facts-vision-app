@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controllers/profile_setup_controller.dart';
 
 class DateOfBirthPage extends ConsumerWidget {
@@ -9,6 +10,7 @@ class DateOfBirthPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final data = ref.watch(profileSetupProvider);
     final controller = ref.read(profileSetupProvider.notifier);
 
@@ -19,7 +21,7 @@ class DateOfBirthPage extends ConsumerWidget {
         children: [
           const SizedBox(height: 24),
           Text(
-            'When\'s your birthday?',
+            l10n.whensBirthday,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 32),
@@ -49,7 +51,7 @@ class DateOfBirthPage extends ConsumerWidget {
                   Text(
                     data.dateOfBirth != null
                         ? '${data.dateOfBirth!.day}/${data.dateOfBirth!.month}/${data.dateOfBirth!.year}'
-                        : 'Select your birth date',
+                        : l10n.selectBirthDate,
                     style: const TextStyle(fontSize: 16),
                   ),
                 ],
@@ -62,7 +64,7 @@ class DateOfBirthPage extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
             ),
-            child: const Text('Continue'),
+            child: Text(l10n.continueButton),
           ),
         ],
       ),

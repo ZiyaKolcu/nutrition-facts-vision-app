@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/app_localizations.dart';
 import 'controllers/scan_controller.dart';
 import '../../core/navigation/main_navigation.dart';
 import '../home/widgets/scan_history_list.dart';
@@ -32,10 +33,11 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
   Widget build(BuildContext context) {
     final ScanState scanState = ref.watch(scanControllerProvider);
     final ScanController controller = ref.read(scanControllerProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Scan'),
+        title: Text(l10n.newScan),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -44,34 +46,32 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-                  TextField(
-                    controller: _titleController,
-                    decoration: const InputDecoration(
-                      labelText: 'Title',
-                      hintText: 'Enter a title for the nutrition facts',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: controller.updateTitle,
-                  ),
-                  const SizedBox(height: 12),
-                  Expanded(
-                    child: scanState.photos.isEmpty
-                        ? const Center(child: Text('No photos added'))
-                        : ListView.separated(
-                            itemCount: scanState.photos.length,
-                            separatorBuilder: (_, __) =>
-                                const SizedBox(height: 12),
-                            itemBuilder: (context, index) {
-                              final photo = scanState.photos[index];
-                              return _PhotoCard(
-                                imagePath: photo.imagePath,
-                                isProcessing: photo.isProcessing,
-                                onRemove: () =>
-                                    controller.removePhoto(photo.id),
-                              );
-                            },
-                          ),
-                  ),
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: l10n.title,
+                  hintText: l10n.enterTitle,
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: controller.updateTitle,
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: scanState.photos.isEmpty
+                    ? Center(child: Text(l10n.noPhotosAdded))
+                    : ListView.separated(
+                        itemCount: scanState.photos.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final photo = scanState.photos[index];
+                          return _PhotoCard(
+                            imagePath: photo.imagePath,
+                            isProcessing: photo.isProcessing,
+                            onRemove: () => controller.removePhoto(photo.id),
+                          );
+                        },
+                      ),
+              ),
               if (scanState.errorMessage != null) ...[
                 const SizedBox(height: 8),
                 Text(
@@ -99,7 +99,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                                           controller.pickImageFromCamera();
                                         },
                                   icon: const Icon(Icons.photo_camera),
-                                  label: const Text('Camera'),
+                                  label: Text(l10n.camera),
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -112,7 +112,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                                           controller.pickImagesFromGallery();
                                         },
                                   icon: const Icon(Icons.collections),
-                                  label: const Text('Gallery'),
+                                  label: Text(l10n.gallery),
                                 ),
                               ),
                             ],
@@ -142,7 +142,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                                   ? Icons.close
                                   : Icons.add_photo_alternate,
                             ),
-                            label: const Text('Add Photo'),
+                            label: Text(l10n.addPhoto),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -155,7 +155,9 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                                     await controller.analyze();
                                     if (!context.mounted) return;
                                     // Check if analysis was successful (no error)
-                                    final finalState = ref.read(scanControllerProvider);
+                                    final finalState = ref.read(
+                                      scanControllerProvider,
+                                    );
                                     if (finalState.errorMessage == null) {
                                       // Clear the scan form
                                       controller.reset();
@@ -163,10 +165,17 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                                       // Refresh home screen
                                       ref.invalidate(scansProvider);
                                       // Switch to home tab
-                                      ref.read(currentTabIndexProvider.notifier).state = 1;
+                                      ref
+                                              .read(
+                                                currentTabIndexProvider
+                                                    .notifier,
+                                              )
+                                              .state =
+                                          1;
                                     }
                                   },
-                            child: (scanState.isProcessing || anyPhotoProcessing)
+                            child:
+                                (scanState.isProcessing || anyPhotoProcessing)
                                 ? const SizedBox(
                                     width: 18,
                                     height: 18,
@@ -175,7 +184,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                                       color: Colors.white,
                                     ),
                                   )
-                                : const Text('Analyze'),
+                                : Text(l10n.analyze),
                           ),
                         ),
                       ],
@@ -204,6 +213,7 @@ class _PhotoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Stack(
       children: [
         Card(
@@ -230,7 +240,7 @@ class _PhotoCard extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             child: IconButton(
               icon: const Icon(Icons.delete_outline, color: Colors.white),
-              tooltip: 'Remove',
+              tooltip: l10n.remove,
               onPressed: onRemove,
             ),
           ),
@@ -258,4 +268,3 @@ class _PhotoCard extends StatelessWidget {
     );
   }
 }
-

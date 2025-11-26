@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme_extensions.dart';
+import '../../../l10n/app_localizations.dart';
 import 'chat/views/chat_with_ai_view.dart';
 import 'overview/views/overview_tab_view.dart';
 
@@ -10,6 +11,7 @@ class AnalysisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -21,9 +23,9 @@ class AnalysisScreen extends StatelessWidget {
               alpha: .7,
             ),
             indicatorColor: context.colors.onPrimary,
-            tabs: const [
-              Tab(text: 'Overview'),
-              Tab(text: 'Ask AI'),
+            tabs: [
+              Tab(text: l10n.overview),
+              Tab(text: l10n.askAI),
             ],
           ),
         ),

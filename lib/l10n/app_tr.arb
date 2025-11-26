@@ -1,0 +1,154 @@
+{
+  "appTitle": "Beslenme Bilgileri Görüntü Analizi",
+  "accountInfo": "Hesap Bilgileri",
+  "created": "Oluşturulma: {date}",
+  "@created": {
+    "description": "Hesap oluşturma tarihi",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "lastSignIn": "Son Giriş: {date}",
+  "@lastSignIn": {
+    "description": "Son giriş tarihi",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "signOut": "Çıkış Yap",
+  "signOutConfirmTitle": "Çıkış Yap",
+  "signOutConfirmMessage": "Çıkış yapmak istediğinizden emin misiniz?",
+  "cancel": "İptal",
+  "language": "Dil",
+  "english": "English",
+  "turkish": "Türkçe",
+  "signOutFailed": "Çıkış yapılamadı: {error}",
+  "@signOutFailed": {
+    "description": "Çıkış hatası mesajı",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "unknown": "Bilinmiyor",
+  "profile": "Profil",
+  "birthDate": "Doğum Tarihi",
+  "selectDate": "Tarih Seç",
+  "gender": "Cinsiyet",
+  "selectGender": "Cinsiyet Seç",
+  "male": "Erkek",
+  "female": "Kadın",
+  "heightCm": "Boy (cm)",
+  "enterHeight": "Boy girin",
+  "weightKg": "Ağırlık (kg)",
+  "enterWeight": "Ağırlık girin",
+  "allergies": "Alerjiler",
+  "healthConditions": "Sağlık Durumları",
+  "dietaryPreferences": "Beslenme Tercihleri",
+  "add": "Ekle",
+  "addItem": "{title} Ekle",
+  "@addItem": {
+    "description": "Öğe ekleme diyaloğu başlığı",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "Tamam",
+  "profileRefreshed": "Profil güncellendi",
+  "newScan": "Yeni Tarama",
+  "title": "Başlık",
+  "enterTitle": "Beslenme bilgileri için bir başlık girin",
+  "noPhotosAdded": "Fotoğraf eklenmedi",
+  "camera": "Kamera",
+  "gallery": "Galeri",
+  "addPhoto": "Fotoğraf Ekle",
+  "analyze": "Analiz Et",
+  "remove": "Kaldır",
+  "overview": "Genel Bakış",
+  "askAI": "Yapay Zekaya Sor",
+  "askAnything": "Herhangi bir şey sorun...",
+  "aiHealthSummary": "Yapay Zeka Sağlık Özeti",
+  "noIngredientData": "İçerik verisi yok",
+  "noSummaryAvailable": "Özet mevcut değil.",
+  "error": "Hata: {message}",
+  "@error": {
+    "description": "Hata mesajı",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetup": "Profil Kurulumu",
+  "welcome": "Hoş Geldiniz!",
+  "setupProfileDescription": "Kişiselleştirilmiş beslenme önerileri sağlamak için profilinizi kuralım.",
+  "getStarted": "Başla",
+  "whatsYourGender": "Cinsiyetiniz nedir?",
+  "continueButton": "Devam Et",
+  "whensBirthday": "Doğum tarihiniz ne?",
+  "selectBirthDate": "Doğum tarihinizi seçin",
+  "bodyMeasurements": "Vücut ölçüleriniz",
+  "anyAllergies": "Herhangi bir alerjiniz var mı?",
+  "addAllergies": "Sahip olduğunuz gıda alerjilerini ekleyin",
+  "anyHealthConditions": "Herhangi bir sağlık durumunuz var mı?",
+  "addHealthConditions": "Bilmemiz gereken sağlık durumlarını ekleyin",
+  "dietaryPreferences": "Beslenme tercihleri",
+  "addDietaryPreferences": "Beslenme tercihlerinizi ekleyin (örn: Vegan, Vejetaryen)",
+  "addItem": "Ekle",
+  "finish": "Bitir",
+  "newScanNav": "Yeni Tarama",
+  "homeNav": "Ana Ekran",
+  "profileNav": "Profil",
+  "signIn": "Giriş Yap",
+  "signUp": "Kayıt Ol",
+  "welcomeBack": "Hoş geldiniz",
+  "signInSubtitle": "Devam etmek için giriş yapın",
+  "createAccount": "Hesap oluştur",
+  "createAccountSubtitle": "Hızlı ve güvenli",
+  "email": "E-posta",
+  "password": "Şifre",
+  "name": "Ad",
+  "confirmPassword": "Şifreyi onayla",
+  "pleaseEnterEmail": "Lütfen e-postanızı girin",
+  "pleaseEnterPassword": "Lütfen şifrenizi girin",
+  "pleaseEnterDisplayName": "Lütfen görünen adınızı girin",
+  "minimumCharacters": "En az 6 karakter",
+  "pleaseConfirmPassword": "Lütfen şifrenizi onaylayın",
+  "passwordsDoNotMatch": "Şifreler eşleşmiyor",
+  "signInFailed": "Giriş yapılamadı",
+  "signUpFailed": "Kayıt yapılamadı",
+  "dontHaveAccount": "Hesabınız yok mu? Kayıt olun",
+  "alreadyHaveAccount": "Zaten hesabınız var mı? Giriş yapın",
+  "noItemsAdded": "Henüz öğe eklenmedi",
+  "skip": "Atla",
+  "addItemButton": "Öğe Ekle",
+  "noScansYet": "Henüz tarama yok",
+  "failedToLoadScans": "Taramalar yüklenemedi. {error}",
+  "@failedToLoadScans": {
+    "description": "Taramalar yüklenirken hata mesajı",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "scanIdMissing": "Tarama kimliği eksik, silinemiyor",
+  "deleteFailed": "Silme başarısız: {error}",
+  "@deleteFailed": {
+    "description": "Silme başarısız olduğunda hata mesajı",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "noNutrientData": "Besin değeri bulunamadı",
+  "nutrients": "Besin Değerleri"
+}

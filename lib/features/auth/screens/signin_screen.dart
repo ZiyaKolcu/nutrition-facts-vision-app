@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../l10n/app_localizations.dart';
 import '../widgets/auth_header.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/auth_button.dart';
@@ -35,9 +36,10 @@ class _SignInScreenState extends State<SignInScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(e.message ?? 'Sign-in failed')));
+        ).showSnackBar(SnackBar(content: Text(e.message ?? l10n.signInFailed)));
       }
     }
   }
@@ -51,8 +53,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign In')),
+      appBar: AppBar(title: Text(l10n.signIn)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -60,33 +63,32 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const AuthHeader(
-                title: 'Welcome back',
-                subtitle: 'Sign in to continue',
+              AuthHeader(
+                title: l10n.welcomeBack,
+                subtitle: l10n.signInSubtitle,
               ),
               const SizedBox(height: 32),
               AuthTextField(
-                label: 'Email',
+                label: l10n.email,
                 controller: _email,
-                validator: (v) => v!.isEmpty ? 'Please enter your email' : null,
+                validator: (v) => v!.isEmpty ? l10n.pleaseEnterEmail : null,
               ),
               const SizedBox(height: 16),
               AuthTextField(
-                label: 'Password',
+                label: l10n.password,
                 obscureText: true,
                 controller: _pass,
-                validator: (v) =>
-                    v!.isEmpty ? 'Please enter your password' : null,
+                validator: (v) => v!.isEmpty ? l10n.pleaseEnterPassword : null,
               ),
               const SizedBox(height: 32),
-              AuthButton(text: 'Sign In', onPressed: _signIn),
+              AuthButton(text: l10n.signIn, onPressed: _signIn),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () => Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (_) => const SignUpScreen()),
                 ),
-                child: const Text("Don't have an account? Sign up"),
+                child: Text(l10n.dontHaveAccount),
               ),
             ],
           ),

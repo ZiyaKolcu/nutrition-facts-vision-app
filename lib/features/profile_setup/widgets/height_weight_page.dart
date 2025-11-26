@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controllers/profile_setup_controller.dart';
 
 class HeightWeightPage extends ConsumerStatefulWidget {
@@ -36,6 +37,7 @@ class _HeightWeightPageState extends ConsumerState<HeightWeightPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final data = ref.watch(profileSetupProvider);
     final controller = ref.read(profileSetupProvider.notifier);
 
@@ -46,7 +48,7 @@ class _HeightWeightPageState extends ConsumerState<HeightWeightPage> {
         children: [
           const SizedBox(height: 24),
           Text(
-            'Your body measurements',
+            l10n.bodyMeasurements,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 32),
@@ -54,7 +56,7 @@ class _HeightWeightPageState extends ConsumerState<HeightWeightPage> {
             controller: _heightController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: 'Height (cm)',
+              labelText: l10n.heightCm,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -69,7 +71,7 @@ class _HeightWeightPageState extends ConsumerState<HeightWeightPage> {
             controller: _weightController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: 'Weight (kg)',
+              labelText: l10n.weightKg,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -85,7 +87,7 @@ class _HeightWeightPageState extends ConsumerState<HeightWeightPage> {
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
             ),
-            child: const Text('Continue'),
+            child: Text(l10n.continueButton),
           ),
         ],
       ),

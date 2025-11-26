@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../l10n/app_localizations.dart';
 import 'scan_item_card.dart';
 import '../../../core/utils/api_base.dart';
 
@@ -80,13 +81,14 @@ class ScanHistoryList extends ConsumerStatefulWidget {
 class _ScanHistoryListState extends ConsumerState<ScanHistoryList> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final scansAsync = ref.watch(scansProvider);
     return scansAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          'Failed to load scans. ${err.toString()}',
+          l10n.failedToLoadScans(err.toString()),
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: Theme.of(context).colorScheme.error,
           ),
@@ -94,7 +96,7 @@ class _ScanHistoryListState extends ConsumerState<ScanHistoryList> {
       ),
       data: (scans) {
         if (scans.isEmpty) {
-          return const Center(child: Text('No scans yet'));
+          return Center(child: Text(l10n.noScansYet));
         }
         return ListView.separated(
           padding: const EdgeInsets.all(16),
@@ -109,11 +111,9 @@ class _ScanHistoryListState extends ConsumerState<ScanHistoryList> {
               onDelete: () async {
                 if (item.scanId.isEmpty) {
                   if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Scan id missing, cannot delete'),
-                      ),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(l10n.scanIdMissing)));
                   }
                   return;
                 }
@@ -147,9 +147,10 @@ class _ScanHistoryListState extends ConsumerState<ScanHistoryList> {
       throw Exception('Failed (${res.statusCode})');
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Delete failed: $e')));
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.deleteFailed(e.toString()))),
+        );
       }
     }
   }

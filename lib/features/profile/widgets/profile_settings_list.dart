@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/theme_extensions.dart';
+import '../../../core/localization/locale_provider.dart';
+import '../../../l10n/app_localizations.dart';
 
-class SettingsList extends StatelessWidget {
+class SettingsList extends ConsumerWidget {
   const SettingsList({super.key});
 
-  Future<void> _signOut(BuildContext context) async {
+  Future<void> _signOut(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out?'),
+        title: Text(l10n.signOutConfirmTitle),
+        content: Text(l10n.signOutConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Sign Out'),
+            child: Text(l10n.signOut),
           ),
         ],
       ),
@@ -31,22 +35,25 @@ class SettingsList extends StatelessWidget {
         Navigator.of(context).popUntil((route) => route.isFirst);
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Sign out failed: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.signOutFailed(e.toString()))),
+          );
         }
       }
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final text = context.textStyles;
     final user = FirebaseAuth.instance.currentUser;
+    final l10n = AppLocalizations.of(context)!;
+    final locale = ref.watch(localeProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Account Info with Language Selection
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -56,7 +63,44 @@ class SettingsList extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Account Info', style: text.titleSmall),
+              // Language Selection Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(l10n.language, style: text.titleSmall),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: context.colors.outline),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: locale.languageCode,
+                        items: [
+                          DropdownMenuItem(
+                            value: 'en',
+                            child: Text(l10n.english),
+                          ),
+                          DropdownMenuItem(
+                            value: 'tr',
+                            child: Text(l10n.turkish),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            ref
+                                .read(localeProvider.notifier)
+                                .setLocale(Locale(value));
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(l10n.accountInfo, style: text.titleSmall),
               const SizedBox(height: 8),
               Row(
                 children: [
@@ -67,7 +111,7 @@ class SettingsList extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Created: ${_formatDate(user?.metadata.creationTime)}',
+                    l10n.created(_formatDate(user?.metadata.creationTime)),
                     style: text.bodySmall?.copyWith(
                       color: context.colors.onSurfaceVariant,
                     ),
@@ -84,7 +128,7 @@ class SettingsList extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Last Sign In: ${_formatDate(user?.metadata.lastSignInTime)}',
+                    l10n.lastSignIn(_formatDate(user?.metadata.lastSignInTime)),
                     style: text.bodySmall?.copyWith(
                       color: context.colors.onSurfaceVariant,
                     ),
@@ -100,12 +144,12 @@ class SettingsList extends StatelessWidget {
           width: double.infinity,
           child: OutlinedButton.icon(
             icon: const Icon(Icons.logout),
-            label: const Text('Sign Out'),
+            label: Text(l10n.signOut),
             style: OutlinedButton.styleFrom(
               foregroundColor: context.colors.error,
               side: BorderSide(color: context.colors.error),
             ),
-            onPressed: () => _signOut(context),
+            onPressed: () => _signOut(context, ref),
           ),
         ),
       ],

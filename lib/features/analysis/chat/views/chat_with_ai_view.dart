@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/chat_notifier.dart';
 import '../widgets/chat_bubble.dart';
 import '../../../../core/theme/theme_extensions.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ChatWithAI extends ConsumerStatefulWidget {
   final String scanId;
@@ -50,13 +51,14 @@ class _ChatWithAIState extends ConsumerState<ChatWithAI> {
   Widget build(BuildContext context) {
     final asyncMessages = ref.watch(chatMessagesProvider(widget.scanId));
     final colors = context.colors;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       children: [
         Expanded(
           child: asyncMessages.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, st) => Center(child: Text('Error: $e')),
+            error: (e, st) => Center(child: Text(l10n.error(e.toString()))),
             data: (messages) {
               return ListView.builder(
                 controller: _scrollController,
@@ -83,7 +85,7 @@ class _ChatWithAIState extends ConsumerState<ChatWithAI> {
                 minLines: 1,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Ask anything...',
+                  hintText: l10n.askAnything,
                   filled: true,
                   fillColor: colors.surfaceContainerHighest,
                   border: OutlineInputBorder(

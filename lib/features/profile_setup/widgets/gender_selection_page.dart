@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controllers/profile_setup_controller.dart';
 
 class GenderSelectionPage extends ConsumerWidget {
@@ -9,6 +10,7 @@ class GenderSelectionPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final data = ref.watch(profileSetupProvider);
     final controller = ref.read(profileSetupProvider.notifier);
 
@@ -19,18 +21,20 @@ class GenderSelectionPage extends ConsumerWidget {
         children: [
           const SizedBox(height: 24),
           Text(
-            'What\'s your gender?',
+            l10n.whatsYourGender,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 32),
           _GenderOption(
             gender: 'Male',
+            genderLabel: l10n.male,
             isSelected: data.gender == 'Male',
             onTap: () => controller.setGender('Male'),
           ),
           const SizedBox(height: 16),
           _GenderOption(
             gender: 'Female',
+            genderLabel: l10n.female,
             isSelected: data.gender == 'Female',
             onTap: () => controller.setGender('Female'),
           ),
@@ -40,7 +44,7 @@ class GenderSelectionPage extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
             ),
-            child: const Text('Continue'),
+            child: Text(l10n.continueButton),
           ),
         ],
       ),
@@ -50,11 +54,13 @@ class GenderSelectionPage extends ConsumerWidget {
 
 class _GenderOption extends StatelessWidget {
   final String gender;
+  final String genderLabel;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _GenderOption({
     required this.gender,
+    required this.genderLabel,
     required this.isSelected,
     required this.onTap,
   });
@@ -71,17 +77,23 @@ class _GenderOption extends StatelessWidget {
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(12),
-          color: isSelected ? Theme.of(context).primaryColor.withValues(alpha: 0.1) : null,
+          color: isSelected
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+              : null,
         ),
         child: Row(
           children: [
             Icon(
-              gender == 'Male' ? Icons.male : gender == 'Female' ? Icons.female : Icons.person,
+              gender == 'Male'
+                  ? Icons.male
+                  : gender == 'Female'
+                  ? Icons.female
+                  : Icons.person,
               color: isSelected ? Theme.of(context).primaryColor : Colors.grey,
             ),
             const SizedBox(width: 16),
             Text(
-              gender,
+              genderLabel,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/theme_extensions.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/health_profile.dart';
 
 class ProfileInfoSection extends StatelessWidget {
@@ -23,6 +24,7 @@ class ProfileInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final text = context.textStyles;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +38,7 @@ class ProfileInfoSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Birth Date', style: text.titleSmall),
+                  Text(l10n.birthDate, style: text.titleSmall),
 
                   const SizedBox(height: 8),
                   InkWell(
@@ -59,7 +61,7 @@ class ProfileInfoSection extends StatelessWidget {
                                   ? DateFormat(
                                       'dd/MM/yyyy',
                                     ).format(profile.dateOfBirth!)
-                                  : 'Select Date',
+                                  : l10n.selectDate,
                               style: text.bodyMedium?.copyWith(
                                 color: profile.dateOfBirth != null
                                     ? colors.onSurface
@@ -86,7 +88,7 @@ class ProfileInfoSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Gender', style: text.titleSmall),
+                  Text(l10n.gender, style: text.titleSmall),
                   const SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -101,16 +103,19 @@ class ProfileInfoSection extends StatelessWidget {
                             ? null
                             : profile.gender,
                         hint: Text(
-                          'Select Gender',
+                          l10n.selectGender,
                           style: text.bodyMedium?.copyWith(
                             color: colors.onSurfaceVariant,
                           ),
                         ),
-                        items: const [
-                          DropdownMenuItem(value: 'Male', child: Text('Male')),
+                        items: [
+                          DropdownMenuItem(
+                            value: 'Male',
+                            child: Text(l10n.male),
+                          ),
                           DropdownMenuItem(
                             value: 'Female',
-                            child: Text('Female'),
+                            child: Text(l10n.female),
                           ),
                         ],
                         onChanged: onGenderChanged,
@@ -132,12 +137,12 @@ class ProfileInfoSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Height (cm)', style: text.titleSmall),
+                  Text(l10n.heightCm, style: text.titleSmall),
                   const SizedBox(height: 8),
                   TextField(
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: 'Enter height',
+                      hintText: l10n.enterHeight,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -165,12 +170,12 @@ class ProfileInfoSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Weight (kg)', style: text.titleSmall),
+                  Text(l10n.weightKg, style: text.titleSmall),
                   const SizedBox(height: 8),
                   TextField(
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: 'Enter weight',
+                      hintText: l10n.enterWeight,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),

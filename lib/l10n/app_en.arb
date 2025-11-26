@@ -1,0 +1,154 @@
+{
+  "appTitle": "Nutrition Facts Vision",
+  "accountInfo": "Account Info",
+  "created": "Created: {date}",
+  "@created": {
+    "description": "Account creation date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "lastSignIn": "Last Sign In: {date}",
+  "@lastSignIn": {
+    "description": "Last sign in date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "signOut": "Sign Out",
+  "signOutConfirmTitle": "Sign Out",
+  "signOutConfirmMessage": "Are you sure you want to sign out?",
+  "cancel": "Cancel",
+  "language": "Language",
+  "english": "English",
+  "turkish": "Türkçe",
+  "signOutFailed": "Sign out failed: {error}",
+  "@signOutFailed": {
+    "description": "Sign out error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "unknown": "Unknown",
+  "profile": "Profile",
+  "birthDate": "Birth Date",
+  "selectDate": "Select Date",
+  "gender": "Gender",
+  "selectGender": "Select Gender",
+  "male": "Male",
+  "female": "Female",
+  "heightCm": "Height (cm)",
+  "enterHeight": "Enter height",
+  "weightKg": "Weight (kg)",
+  "enterWeight": "Enter weight",
+  "allergies": "Allergies",
+  "healthConditions": "Health Conditions",
+  "dietaryPreferences": "Dietary Preferences",
+  "add": "Add",
+  "addItem": "Add {title}",
+  "@addItem": {
+    "description": "Add item dialog title",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+  "profileRefreshed": "Profile refreshed",
+  "newScan": "New Scan",
+  "title": "Title",
+  "enterTitle": "Enter a title for the nutrition facts",
+  "noPhotosAdded": "No photos added",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "addPhoto": "Add Photo",
+  "analyze": "Analyze",
+  "remove": "Remove",
+  "overview": "Overview",
+  "askAI": "Ask AI",
+  "askAnything": "Ask anything...",
+  "aiHealthSummary": "AI Health Summary",
+  "noIngredientData": "No ingredient data available",
+  "noSummaryAvailable": "No summary available.",
+  "error": "Error: {message}",
+  "@error": {
+    "description": "Error message",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "profileSetup": "Profile Setup",
+  "welcome": "Welcome!",
+  "setupProfileDescription": "Let's set up your profile to provide personalized nutrition recommendations.",
+  "getStarted": "Get Started",
+  "whatsYourGender": "What's your gender?",
+  "continueButton": "Continue",
+  "whensBirthday": "When's your birthday?",
+  "selectBirthDate": "Select your birth date",
+  "bodyMeasurements": "Your body measurements",
+  "anyAllergies": "Any allergies?",
+  "addAllergies": "Add any food allergies you have",
+  "anyHealthConditions": "Any health conditions?",
+  "addHealthConditions": "Add any health conditions we should know about",
+  "dietaryPreferences": "Dietary preferences?",
+  "addDietaryPreferences": "Add your dietary preferences (e.g., Vegan, Vegetarian)",
+  "addItem": "Add",
+  "finish": "Finish",
+  "newScanNav": "New Scan",
+  "homeNav": "Home",
+  "profileNav": "Profile",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "welcomeBack": "Welcome back",
+  "signInSubtitle": "Sign in to continue",
+  "createAccount": "Create account",
+  "createAccountSubtitle": "Quick & secure",
+  "email": "Email",
+  "password": "Password",
+  "name": "Name",
+  "confirmPassword": "Confirm password",
+  "pleaseEnterEmail": "Please enter your email",
+  "pleaseEnterPassword": "Please enter your password",
+  "pleaseEnterDisplayName": "Please enter your display name",
+  "minimumCharacters": "Minimum 6 characters",
+  "pleaseConfirmPassword": "Please confirm your password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "signInFailed": "Sign-in failed",
+  "signUpFailed": "Sign-up failed",
+  "dontHaveAccount": "Don't have an account? Sign up",
+  "alreadyHaveAccount": "Already have an account? Sign in",
+  "noItemsAdded": "No items added yet",
+  "skip": "Skip",
+  "addItemButton": "Add Item",
+  "noScansYet": "No scans yet",
+  "failedToLoadScans": "Failed to load scans. {error}",
+  "@failedToLoadScans": {
+    "description": "Error message when scans fail to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "scanIdMissing": "Scan id missing, cannot delete",
+  "deleteFailed": "Delete failed: {error}",
+  "@deleteFailed": {
+    "description": "Error message when delete fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "noNutrientData": "No nutrient data available",
+  "nutrients": "Nutrients"
+}

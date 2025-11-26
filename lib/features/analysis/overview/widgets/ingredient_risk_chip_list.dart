@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../models/scan_detail_model.dart';
 import 'ingredient_risk_chip.dart';
 
@@ -8,8 +9,9 @@ class IngredientRiskChipList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (ingredients.isEmpty) {
-      return const Text('No ingredient data available');
+      return Text(l10n.noIngredientData);
     }
     return Wrap(
       spacing: 8,

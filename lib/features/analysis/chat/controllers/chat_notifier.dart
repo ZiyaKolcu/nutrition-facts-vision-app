@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../core/utils/api_base.dart';
+import '../../../../core/localization/locale_provider.dart';
 import '../models/chat_message.dart';
 
 final _baseUrlProvider = Provider<String>((ref) => getApiBase());
@@ -98,10 +99,12 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<ChatMessage>>> {
         throw Exception('No idToken');
       }
 
+      final locale = ref.read(localeProvider);
+      final language = locale.languageCode;
+
       final baseUrl = ref.read(_baseUrlProvider);
-      final uri = Uri.parse(
-        '$baseUrl/chat/$scanId',
-      ).replace(queryParameters: {'message': text});
+      final payload = <String, dynamic>{'message': text, 'language': language};
+      final uri = Uri.parse('$baseUrl/chat/$scanId');
       final res = await http
           .post(
             uri,
@@ -109,6 +112,7 @@ class ChatNotifier extends StateNotifier<AsyncValue<List<ChatMessage>>> {
               'Authorization': 'Bearer $idToken',
               'Content-Type': 'application/json',
             },
+            body: jsonEncode(payload),
           )
           .timeout(const Duration(seconds: 30));
 

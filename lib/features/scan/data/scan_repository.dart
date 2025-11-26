@@ -4,13 +4,15 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import '../../../core/utils/api_base.dart';
+import '../../../core/localization/locale_provider.dart';
 
 String get _baseUrl => getApiBase();
 
 class ScanRepository {
   final http.Client httpClient;
+  final Ref ref;
 
-  ScanRepository({http.Client? httpClient})
+  ScanRepository({http.Client? httpClient, required this.ref})
     : httpClient = httpClient ?? http.Client();
 
   Future<void> analyze({
@@ -33,9 +35,13 @@ class ScanRepository {
         .where((t) => t.isNotEmpty)
         .join('\n\n');
 
+    final locale = ref.read(localeProvider);
+    final language = locale.languageCode;
+
     final payload = <String, dynamic>{
       'title': title,
       'raw_text': rawText,
+      'language': language,
       if (barcode != null && barcode.isNotEmpty) 'barcode': barcode,
     };
 
@@ -58,7 +64,7 @@ class ScanRepository {
 }
 
 final scanRepositoryProvider = Provider<ScanRepository>(
-  (ref) => ScanRepository(),
+  (ref) => ScanRepository(ref: ref),
 );
 
 class ScanGroupItem {

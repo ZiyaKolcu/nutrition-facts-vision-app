@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../controllers/scan_detail_provider.dart';
 import '../widgets/ai_summary_card.dart';
 import '../widgets/ingredient_risk_chip_list.dart';
@@ -12,16 +13,17 @@ class OverviewTabView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final scanDetailAsync = ref.watch(scanDetailProvider(scanId));
     return scanDetailAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, st) => Center(child: Text('Error: $e')),
+      error: (e, st) => Center(child: Text(l10n.error(e.toString()))),
       data: (scan) => SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             AiSummaryCard(
-              summary: scan.summaryExplanation ?? 'No summary available.',
+              summary: scan.summaryExplanation ?? l10n.noSummaryAvailable,
             ),
             const SizedBox(height: 16),
             IngredientRiskChipList(ingredients: scan.ingredients),
@@ -33,4 +35,3 @@ class OverviewTabView extends ConsumerWidget {
     );
   }
 }
-

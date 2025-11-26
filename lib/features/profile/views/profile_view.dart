@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../controllers/health_profile_notifier.dart';
 import '../widgets/profile_avatar_section.dart';
 import '../widgets/profile_settings_list.dart';
@@ -31,10 +32,11 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final profileAsync = ref.watch(healthProfileProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(l10n.profile),
         actions: [
           if (user != null)
             IconButton(
@@ -44,7 +46,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                 await ref.read(healthProfileProvider.notifier).fetchProfile();
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Profile refreshed')),
+                    SnackBar(content: Text(l10n.profileRefreshed)),
                   );
                 }
               },
@@ -82,21 +84,21 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                     ),
                     const SizedBox(height: 16),
                     ProfileChipSection(
-                      title: 'Allergies',
+                      title: l10n.allergies,
                       items: profile.allergies,
                       onChanged: (list) => ref
                           .read(healthProfileProvider.notifier)
                           .updateProfileField(allergies: list),
                     ),
                     ProfileChipSection(
-                      title: 'Health Conditions',
+                      title: l10n.healthConditions,
                       items: profile.healthConditions,
                       onChanged: (list) => ref
                           .read(healthProfileProvider.notifier)
                           .updateProfileField(healthConditions: list),
                     ),
                     ProfileChipSection(
-                      title: 'Dietary Preferences',
+                      title: l10n.dietaryPreferences,
                       items: profile.dietaryPreferences,
                       onChanged: (list) => ref
                           .read(healthProfileProvider.notifier)

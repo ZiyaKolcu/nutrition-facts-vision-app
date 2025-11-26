@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/theme_extensions.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ProfileChipSection extends StatelessWidget {
   final String title;
@@ -56,20 +57,21 @@ class ProfileChipSection extends StatelessWidget {
   }
 
   void _addItem(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final textCtrl = TextEditingController();
     final res = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Add $title'),
+        title: Text(l10n.addItem(title)),
         content: TextField(controller: textCtrl, autofocus: true),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, textCtrl.text.trim()),
-            child: const Text('Add'),
+            child: Text(l10n.add),
           ),
         ],
       ),

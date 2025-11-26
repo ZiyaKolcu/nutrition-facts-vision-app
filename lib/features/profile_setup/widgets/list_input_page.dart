@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controllers/profile_setup_controller.dart';
 
 enum ListInputType { allergies, healthConditions, dietaryPreferences }
@@ -16,25 +17,25 @@ class ListInputPage extends ConsumerWidget {
     this.isLast = false,
   });
 
-  String get title {
+  String getTitle(AppLocalizations l10n) {
     switch (type) {
       case ListInputType.allergies:
-        return 'Any allergies?';
+        return l10n.anyAllergies;
       case ListInputType.healthConditions:
-        return 'Any health conditions?';
+        return l10n.anyHealthConditions;
       case ListInputType.dietaryPreferences:
-        return 'Dietary preferences?';
+        return l10n.dietaryPreferences;
     }
   }
 
-  String get subtitle {
+  String getSubtitle(AppLocalizations l10n) {
     switch (type) {
       case ListInputType.allergies:
-        return 'Add any food allergies you have';
+        return l10n.addAllergies;
       case ListInputType.healthConditions:
-        return 'Add any health conditions we should know about';
+        return l10n.addHealthConditions;
       case ListInputType.dietaryPreferences:
-        return 'Add your dietary preferences (e.g., Vegan, Vegetarian)';
+        return l10n.addDietaryPreferences;
     }
   }
 
@@ -93,6 +94,7 @@ class ListInputPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final items = _getItems(ref);
 
     return Padding(
@@ -101,14 +103,20 @@ class ListInputPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 24),
-          Text(title, style: Theme.of(context).textTheme.headlineSmall),
+          Text(
+            getTitle(l10n),
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
           const SizedBox(height: 8),
-          Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+          Text(
+            getSubtitle(l10n),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           const SizedBox(height: 32),
           OutlinedButton.icon(
             onPressed: () => _showAddDialog(context, ref),
             icon: Icon(icon),
-            label: const Text('Add Item'),
+            label: Text(l10n.addItemButton),
             style: OutlinedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
             ),
@@ -118,7 +126,7 @@ class ListInputPage extends ConsumerWidget {
             child: items.isEmpty
                 ? Center(
                     child: Text(
-                      'No items added yet',
+                      l10n.noItemsAdded,
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                   )
@@ -144,13 +152,10 @@ class ListInputPage extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),
             ),
-            child: Text(isLast ? 'Complete Setup' : 'Continue'),
+            child: Text(isLast ? l10n.finish : l10n.continueButton),
           ),
           const SizedBox(height: 8),
-          TextButton(
-            onPressed: onNext,
-            child: const Text('Skip'),
-          ),
+          TextButton(onPressed: onNext, child: Text(l10n.skip)),
         ],
       ),
     );
@@ -161,8 +166,8 @@ class ListInputPage extends ConsumerWidget {
     final itemType = type == ListInputType.allergies
         ? 'Allergy'
         : type == ListInputType.healthConditions
-            ? 'Health Condition'
-            : 'Dietary Preference';
+        ? 'Health Condition'
+        : 'Dietary Preference';
 
     final result = await showDialog<String>(
       context: context,

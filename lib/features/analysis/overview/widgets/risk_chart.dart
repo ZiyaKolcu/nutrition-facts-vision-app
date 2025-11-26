@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/theme_extensions.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../models/scan_detail_model.dart';
 
 class RiskChart extends StatelessWidget {
@@ -9,11 +10,12 @@ class RiskChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = context.textStyles;
+    final l10n = AppLocalizations.of(context)!;
     if (nutrients.isEmpty) {
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Text('No nutrient data available', style: text.bodyMedium),
+          child: Text(l10n.noNutrientData, style: text.bodyMedium),
         ),
       );
     }
@@ -23,7 +25,7 @@ class RiskChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Nutrients', style: text.titleMedium),
+            Text(l10n.nutrients, style: text.titleMedium),
             const SizedBox(height: 12),
             ...nutrients.map(
               (n) => Padding(

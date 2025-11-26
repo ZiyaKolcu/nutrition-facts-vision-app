@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../l10n/app_localizations.dart';
 import '../controllers/profile_setup_controller.dart';
 import '../widgets/welcome_page.dart';
 import '../widgets/gender_selection_page.dart';
@@ -55,18 +56,20 @@ class _ProfileSetupViewState extends ConsumerState<ProfileSetupView> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.error(e.toString()))));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Setup'),
+        title: Text(l10n.profileSetup),
         leading: _currentPage > 0
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -94,10 +97,7 @@ class _ProfileSetupViewState extends ConsumerState<ProfileSetupView> {
                 GenderSelectionPage(onNext: _nextPage),
                 DateOfBirthPage(onNext: _nextPage),
                 HeightWeightPage(onNext: _nextPage),
-                ListInputPage(
-                  type: ListInputType.allergies,
-                  onNext: _nextPage,
-                ),
+                ListInputPage(type: ListInputType.allergies, onNext: _nextPage),
                 ListInputPage(
                   type: ListInputType.healthConditions,
                   onNext: _nextPage,
