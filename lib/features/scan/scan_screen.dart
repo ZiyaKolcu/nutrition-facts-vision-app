@@ -149,7 +149,9 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed:
-                                (scanState.isProcessing || anyPhotoProcessing)
+                                (scanState.isProcessing ||
+                                    anyPhotoProcessing ||
+                                    scanState.photos.isEmpty)
                                 ? null
                                 : () async {
                                     await controller.analyze();
@@ -175,15 +177,19 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                                     }
                                   },
                             child:
-                                (scanState.isProcessing || anyPhotoProcessing)
-                                ? const SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white,
-                                    ),
-                                  )
+                                (scanState.isProcessing ||
+                                    anyPhotoProcessing ||
+                                    scanState.photos.isEmpty)
+                                ? (scanState.isProcessing || anyPhotoProcessing)
+                                      ? const SizedBox(
+                                          width: 18,
+                                          height: 18,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : Text(l10n.analyze)
                                 : Text(l10n.analyze),
                           ),
                         ),
