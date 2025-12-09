@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/localization/locale_provider.dart';
+import '../../../core/theme/theme_extensions.dart';
 import '../widgets/auth_header.dart';
 import '../widgets/auth_text_field.dart';
 import '../widgets/auth_button.dart';
 import 'signup_screen.dart';
 import 'auth_gate.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  ConsumerState<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _pass = TextEditingController();
@@ -54,6 +57,8 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = ref.watch(localeProvider);
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.signIn)),
       body: Padding(
@@ -89,6 +94,51 @@ class _SignInScreenState extends State<SignInScreen> {
                   MaterialPageRoute(builder: (_) => const SignUpScreen()),
                 ),
                 child: Text(l10n.dontHaveAccount),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.language,
+                    size: 20,
+                    color: context.colors.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: context.colors.outline),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: locale.languageCode,
+                        isDense: true,
+                        items: [
+                          DropdownMenuItem(
+                            value: 'en',
+                            child: Text(l10n.english),
+                          ),
+                          DropdownMenuItem(
+                            value: 'tr',
+                            child: Text(l10n.turkish),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            ref
+                                .read(localeProvider.notifier)
+                                .setLocale(Locale(value));
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
