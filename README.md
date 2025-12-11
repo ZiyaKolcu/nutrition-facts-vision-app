@@ -121,7 +121,7 @@ lib/
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/ZiyaKolcu/nutrition-facts-vision-app.git
    cd nutrition-facts-vision-app
    ```
 
